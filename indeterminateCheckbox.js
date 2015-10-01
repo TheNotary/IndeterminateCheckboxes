@@ -1,41 +1,78 @@
 $(function() {
-    // Apparently click is better chan change? Cuz IE?
+    // Hook the onchange event for all checkboxes of the appropriate class
     $('input[type="checkbox"]').change(function(e) {
-        var checked = $(this).prop("checked"),
-            container = $(this).parent(),
-            siblings = container.siblings();
+        var checkStateOfTarget = $(this).prop("checked"),
+            container = getListItemContainingCheckbox($(this));
 
-        container.find('input[type="checkbox"]').prop({
-            indeterminate: false,
-            checked: checked
-        });
+        markAnyChildrenToShareTheCheckStateOfTarget(container, checkStateOfTarget);
 
-        function checkSiblings(el) {
-            var parent = el.parent().parent(),
-                all = true;
+        checkRelatives(container);
 
-            el.siblings().each(function() {
-                return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
-            });
+        // Closures:  checked,
+        //
+        function checkRelatives(el) {
+            var parent = el.parent().parent();
 
-            if (all && checked) {
+            var doTargetOrParentSiblingsMatchTargetCheckState = checkIfSiblingsToTargetOrParentsAreTheSameCheckStateAsTarget(el);
+
+            if (allCheckboxesOfThisTierAreChecked()) {
                 parent.children('input[type="checkbox"]').prop({
                     indeterminate: false,
-                    checked: checked
+                    checked: checkStateOfTarget
                 });
-                checkSiblings(parent);
-            } else if (all && !checked) {
-                parent.children('input[type="checkbox"]').prop("checked", checked);
+                checkRelatives(parent);
+            } else if (allCheckboxesOfThisTierAreUnchecked()) {
+                parent.children('input[type="checkbox"]').prop("checked", checkStateOfTarget);
                 parent.children('input[type="checkbox"]').prop("indeterminate", (parent.find('input[type="checkbox"]:checked').length > 0));
-                checkSiblings(parent);
-            } else {
+                checkRelatives(parent);
+            } else { // the checkboxes of this tier are mix and matched
+                console.log("mix matched");
                 el.parents("li").children('input[type="checkbox"]').prop({
                     indeterminate: true,
                     checked: false
                 });
             }
+
+
+            function allCheckboxesOfThisTierAreChecked() {
+                return (doTargetOrParentSiblingsMatchTargetCheckState && checkStateOfTarget);
+            }
+
+            function allCheckboxesOfThisTierAreUnchecked() {
+                return (doTargetOrParentSiblingsMatchTargetCheckState && !checkStateOfTarget);
+            }
+
+            function checkIfSiblingsToTargetOrParentsAreTheSameCheckStateAsTarget(el) {
+                var doTargetOrParentSiblingsMatchTargetCheckState = true;
+
+                el.siblings().each(function() {
+                    doTargetOrParentSiblingsMatchTargetCheckState = ($(this).children('input[type="checkbox"]').prop("checked") === checkStateOfTarget);
+                });
+
+                return doTargetOrParentSiblingsMatchTargetCheckState;
+            }
+
         }
 
-      checkSiblings(container);
+
+
+
+        function getListItemContainingCheckbox(checkboxEl) {
+            return checkboxEl.parent();
+        }
+
+        // make sure none of the children of this checkbox are set to indeterminate
+        // And mark all the children checked, since their parent has been marked thus
+        function markAnyChildrenToShareTheCheckStateOfTarget(container, checkStateOfTarget) {
+            container.find('input[type="checkbox"]').prop({
+                indeterminate: false,
+                checked: checkStateOfTarget
+            });
+        }
+
+
+
+
+
     });
 });
