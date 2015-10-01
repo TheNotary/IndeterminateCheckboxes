@@ -7,7 +7,6 @@ $(function() {
         markAnyChildrenToShareTheCheckStateOfTarget(container, checkStateOfTarget);
         checkRelatives(container);
 
-        // Closures:  checked,
         // This recursion based function will check if the siblings of el
         // all match the entering target checkbox's state, and when they do
         // it set's the parent's check state accordingly...
@@ -23,11 +22,11 @@ $(function() {
             var doTargetSiblingsOrParentSiblingsMatchTargetCheckState = checkIfSiblingsToTargetOrParentsAreTheSameCheckStateAsTarget(el);
 
             if (allSiblingsOfThisTierAreChecked()) {
-                markTheParentCheckboxToThisContainersTierAsChecked(parent);
+                markTheParentOfThisTierChecked(parent);
                 checkRelatives(parent);
             }
             else if (allCheckboxesOfThisTierAreUnchecked()) {
-                markTheParentCheckboxToThisContainersTierAsUnchecked(parent);
+                markTheParentOfThisTierUncheckedOrIndeterminate(parent);
                 checkRelatives(parent);
             }
             // The checkboxes of this tier are mix and matched, therefore
@@ -84,14 +83,14 @@ $(function() {
             });
         }
 
-        function markTheParentCheckboxToThisContainersTierAsUnchecked(parent) {
+        function markTheParentOfThisTierUncheckedOrIndeterminate(parent) {
             parent.children('input[type="checkbox"]').prop({
                 checked: false,
                 indeterminate: (parent.find('input[type="checkbox"]:checked').length > 0)
             });
         }
 
-        function markTheParentCheckboxToThisContainersTierAsChecked(parent) {
+        function markTheParentOfThisTierChecked(parent) {
             parent.children('input[type="checkbox"]').prop({
                 indeterminate: false,
                 checked: true
