@@ -3,33 +3,33 @@
 
 <head>
 	<meta charset='UTF-8'>
-	
+
 	<title>Indeterminate Checkboxes</title>
-	
+
 	<link rel='stylesheet' href='css/style.css'>
-	
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>
-  	$(function() {
+  $(function() {
   	  // Apparently click is better chan change? Cuz IE?
       $('input[type="checkbox"]').change(function(e) {
       var checked = $(this).prop("checked"),
           container = $(this).parent(),
           siblings = container.siblings();
-  
+
       container.find('input[type="checkbox"]').prop({
           indeterminate: false,
           checked: checked
       });
-  
+
       function checkSiblings(el) {
           var parent = el.parent().parent(),
               all = true;
-  
+
           el.siblings().each(function() {
               return all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
           });
-  
+
           if (all && checked) {
               parent.children('input[type="checkbox"]').prop({
                   indeterminate: false,
@@ -47,7 +47,7 @@
               });
           }
         }
-    
+
         checkSiblings(container);
       });
     });
@@ -56,15 +56,29 @@
 
 <body>
 
+<div id="demo-top-bar">
+
+  <div id="demo-bar-inside">
+
+    <h2 id="demo-bar-badge">
+      <a href="/">CSS-Tricks Example</a>
+    </h2>
+
+    <div id="demo-bar-buttons">
+      <a class='header-button' href='/13467-indeterminate-checkboxes/'>&larr; Back to Article</a> &nbsp; <a class='header-button' href='/examples/'>More Demos &rarr;</a>    </div>
+
+  </div>
+
+</div>
 	<div id="page-wrap">
-	
+
 	   <h1>Indeterminate Checkboxes</h1>
-		
+
   	 <ul>
         <li>
             <input type="checkbox" name="tall" id="tall">
             <label for="tall">Tall Things</label>
-            
+
             <ul>
                  <li>
                      <input type="checkbox" name="tall-1" id="tall-1">
@@ -73,7 +87,7 @@
                  <li>
                      <input type="checkbox" name="tall-2" id="tall-2">
                      <label for="tall-2">Giants</label>
-                     
+
                      <ul>
                          <li>
                              <input type="checkbox" name="tall-2-1" id="tall-2-1">
@@ -94,7 +108,7 @@
         <li>
             <input type="checkbox" name="short" id="short">
             <label for="short">Short Things</label>
-            
+
             <ul>
                  <li>
                      <input type="checkbox" name="short-1" id="short-1">
@@ -111,9 +125,71 @@
             </ul>
         </li>
     </ul>
-	
+
 	</div>
-	
+
+ <style type="text/css" style="display: none !important;">
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	#demo-top-bar {
+		text-align: left;
+		background: #222;
+		position: relative;
+		zoom: 1;
+		width: 100% !important;
+		z-index: 6000;
+		padding: 20px 0 20px;
+	}
+	#demo-bar-inside {
+		width: 960px;
+		margin: 0 auto;
+		position: relative;
+		overflow: hidden;
+	}
+	#demo-bar-buttons {
+		padding-top: 10px;
+		float: right;
+	}
+	#demo-bar-buttons a {
+		font-size: 12px;
+		margin-left: 20px;
+		color: white;
+		margin: 2px 0;
+		text-decoration: none;
+		font: 14px "Lucida Grande", Sans-Serif !important;
+	}
+	#demo-bar-buttons a:hover,
+	#demo-bar-buttons a:focus {
+		text-decoration: underline;
+	}
+	#demo-bar-badge {
+		display: inline-block;
+		width: 302px;
+		padding: 0 !important;
+		margin: 0 !important;
+		background-color: transparent !important;
+	}
+	#demo-bar-badge a {
+		display: block;
+		width: 100%;
+		height: 38px;
+		border-radius: 0;
+		bottom: auto;
+		margin: 0;
+		background: url(/images/examples-logo.png) no-repeat;
+		background-size: 100%;
+		overflow: hidden;
+		text-indent: -9999px;
+	}
+	#demo-bar-badge:before, #demo-bar-badge:after {
+		display: none !important;
+	}
+</style>
 </body>
 
 </html>
