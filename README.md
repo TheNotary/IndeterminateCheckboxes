@@ -9,6 +9,24 @@ This is a really complicated recursion project (from the perspective of a backen
 so I finally refactored the source tutorial code, and was then able to drop it into my web app.  
 Bottom line, I'm sharing the cleaned up (it's in a ruby-javascript dialect) code so other's can re-use it with out spending too much time.  
 
+## Configuration
+
+To use this code, set the class of all your checkboxes to be 'indeterminate-checkbox'.  
+
+The default html markup scheme goes like this:
+
+    ul
+      li
+        input
+        ul
+          li
+            input
+
+Notice that going from input up to li, it's just 1 step?  
+That is defined as the variable at the top of the file `stepsFromCheckboxToContainer`.  
+The `stepsFromContainerToParentContainer` refers to the distance from the deepest `li` to the next up `li`, 2 steps in this default scenario.  
+
+
 ## License
 
 This work was adapted from Chris Coyier.  You can see his license which applies to the revisions made to his code.  
