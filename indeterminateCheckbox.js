@@ -1,6 +1,12 @@
 $(function() {
+
+    // Configs:
+    var selectorForCheckboxes = 'input[type="checkbox"].indeterminate-checkbox',
+        stepsFromCheckboxToContainer = 1,
+        stepsFromContainerToParentContainer = 2;
+
     // Hook the onchange event for all checkboxes of the appropriate class
-    $('input[type="checkbox"]').change(function(e) {
+    $(selectorForCheckboxes).change(function(e) {
         var checkStateOfTarget = $(this).prop("checked"),
             container = getListItemContainingCheckbox($(this));
 
@@ -18,7 +24,9 @@ $(function() {
             // Prevent bubbling up beyond the treeview
             if (el.prop("tagName") != "LI") return;
 
-            var parent = el.parent().parent();
+            // should be an li element (hosting not only a checkbox, but also
+            // a ul of li's, each li containing checkboxes
+            var parent = getParentOfCurrentContainer(el);
             var doTargetSiblingsOrParentSiblingsMatchTargetCheckState = checkIfSiblingsToTargetOrParentsAreTheSameCheckStateAsTarget(el);
 
             if (allSiblingsOfThisTierAreChecked()) {
@@ -34,6 +42,7 @@ $(function() {
             else {
                 markAllDirectAncestorsAsIndeterminate(el);
             }
+
 
             // /End confusing recursive logic
 
@@ -51,7 +60,8 @@ $(function() {
                 var doTargetSiblingsOrParentSiblingsMatchTargetCheckState = true;
 
                 el.siblings().each(function() {
-                    doTargetSiblingsOrParentSiblingsMatchTargetCheckState = ($(this).children('input[type="checkbox"]').prop("checked") === checkStateOfTarget);
+                    doTargetSiblingsOrParentSiblingsMatchTargetCheckState =
+                      ($(this).children(selectorForCheckboxes).prop("checked") === checkStateOfTarget);
                 });
 
                 return doTargetSiblingsOrParentSiblingsMatchTargetCheckState;
@@ -59,14 +69,12 @@ $(function() {
 
         }
 
-        function getListItemContainingCheckbox(checkboxEl) {
-            return checkboxEl.parent();
-        }
+
 
         // make sure none of the children of this checkbox are set to indeterminate
         // And mark all the children checked, since their parent has been marked thus
         function markAnyChildrenToShareTheCheckStateOfTarget(container, checkStateOfTarget) {
-            container.find('input[type="checkbox"]').prop({
+            container.find(selectorForCheckboxes).prop({
                 indeterminate: false,
                 checked: checkStateOfTarget
             });
@@ -77,25 +85,44 @@ $(function() {
         // The parents("li") are actually the containers to Giants and Tall Things
         // So this sets the direct ancestors to an indeterminate state
         function markAllDirectAncestorsAsIndeterminate(elContainer) {
-            elContainer.parents("li").children('input[type="checkbox"]').prop({
+            elContainer.parents("li").children(selectorForCheckboxes).prop({
                 indeterminate: true,
                 checked: false
             });
         }
 
         function markTheParentOfThisTierUncheckedOrIndeterminate(parent) {
-            parent.children('input[type="checkbox"]').prop({
+            parent.children(selectorForCheckboxes).prop({
                 checked: false,
-                indeterminate: (parent.find('input[type="checkbox"]:checked').length > 0)
+                indeterminate: (parent.find(selectorForCheckboxes + ':checked').length > 0)
             });
         }
 
+        // parent should be an li, containing a checkbox.
         function markTheParentOfThisTierChecked(parent) {
-            parent.children('input[type="checkbox"]').prop({
+            parent.children(selectorForCheckboxes).prop({
                 indeterminate: false,
                 checked: true
             });
         }
+
+        function traverseDOMUpwards(startingEl, steps) {
+            var el = startingEl;
+
+            for (var i = 0; i < steps; i++)
+                el = el.parent();
+
+            return el;
+        }
+
+        function getParentOfCurrentContainer(container) {
+            return traverseDOMUpwards(container, stepsFromContainerToParentContainer);
+        }
+
+        function getListItemContainingCheckbox(checkboxEl) {
+            return traverseDOMUpwards(checkboxEl, stepsFromCheckboxToContainer);
+        }
+
 
 
     });
