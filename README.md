@@ -26,6 +26,12 @@ Notice that going from input up to li, it's just 1 step?
 That is defined as the variable at the top of the file `stepsFromCheckboxToContainer`.  
 The `stepsFromContainerToParentContainer` refers to the distance from the deepest `li` to the next up `li`, 2 steps in this default scenario.  
 
+Here are the default configuration settings:
+
+    // Configs:
+    var selectorForCheckboxes = 'input[type="checkbox"].indeterminate-checkbox',
+        stepsFromCheckboxToContainer = 1,
+        stepsFromContainerToParentContainer = 2;
 
 ## License
 
