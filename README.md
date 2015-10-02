@@ -33,6 +33,10 @@ Here are the default configuration settings:
         stepsFromCheckboxToContainer = 1,
         stepsFromContainerToParentContainer = 2;
 
+## Usage
+
+Simply call `IndeterminateCheckbox.init()` on a page you wish to have indeterminate, tree style checkboxes on.  
+
 ## License
 
 This work was adapted from Chris Coyier.  You can see his license which applies to the revisions made to his code.  
