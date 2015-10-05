@@ -1,13 +1,15 @@
 ## Indeterminate Checkboxes
 
-For working demo, see https://css-tricks.com/examples/IndeterminateCheckboxes/
+You can view the demo for *this* repo at http://thenotary.github.io/IndeterminateCheckboxes/
 
-For swell tutorial, see https://css-tricks.com/indeterminate-checkboxes/
+For a working demo which served as the source of this repo, see https://css-tricks.com/examples/IndeterminateCheckboxes/
 
-When I went to those links, I couldn't just copy and paste the provided code into my existing app and have it work...
-This is a really complicated recursion project (from the perspective of a backend ruby dev)
+For a swell tutorial, see https://css-tricks.com/indeterminate-checkboxes/
+
+When I went to the original tutorial, I couldn't just copy and paste the provided code into my existing app and have it work (because I was also running with a collapsible checkbox system and thus had a very messy markup schema)...
+This codebase uses a really complicated recursion project (from the perspective of a backend ruby dev)
 so I finally refactored the source tutorial code, and was then able to drop it into my web app.  
-Bottom line, I'm sharing the cleaned up (it's in a ruby-javascript dialect) code so other's can re-use it with out spending too much time.  
+Bottom line, I'm sharing the cleaned up code (it's in a ruby-javascript dialect) so other's can re-use it with out spending too much time deciphering it and making adaptations.  
 
 ## Configuration
 
