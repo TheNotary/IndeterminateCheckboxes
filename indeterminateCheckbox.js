@@ -185,7 +185,7 @@
                     var childCheckbox = elContainer;
                     var s = stepsFromCheckboxToContainer - 1;
                     for (var i = 0; i < s; i++) {
-                        childCheckbox = childCheckbox.child();
+                        childCheckbox = childCheckbox.children();
                     }
                     childCheckbox = childCheckbox.children(selectorForCheckboxes);
                     return childCheckbox;
@@ -201,7 +201,7 @@
 
                     var s = stepsFromCheckboxToContainer - 1;
                     for (var i = 0; i < s; i++) {
-                        childCheckbox = childCheckbox.child();
+                        childCheckbox = childCheckbox.children();
                     }
                     childCheckbox = childCheckbox.children(selectorForCheckboxes);
 
