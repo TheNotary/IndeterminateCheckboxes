@@ -82,18 +82,21 @@
                      * Else returns true.
                      *
                      * @param {Element} elContainer
-                     * @return {boolean} doTargetSiblingsOrParentSiblingsMatchTargetCheckState
+                     * @return {boolean} !onesNotRight
                      */
                     function checkIfSiblingsToEitherTargetOrParentsAreTheSameCheckStateAsTarget(elContainer) {
-                        var doTargetSiblingsOrParentSiblingsMatchTargetCheckState = true;
+                        var onesNotRight = false;
 
                         elContainer.siblings().each(function() {
-                            doTargetSiblingsOrParentSiblingsMatchTargetCheckState =
-                              ($(this).children(selectorForCheckboxes).prop("checked") === checkStateOfTarget);
-                              //($(this).children(selectorForCheckboxes).prop("checked") === checkStateOfTarget);
+                            var doesSiblingStateMatchesTarget =
+                              (getCheckboxOfContainer($(this)).prop("checked") === checkStateOfTarget);
+
+                              if (!doesSiblingStateMatchesTarget)
+                                onesNotRight = true;
                         });
 
-                        return doTargetSiblingsOrParentSiblingsMatchTargetCheckState;
+                        // when onesNotRight is false, we should return true
+                        return !onesNotRight;
                     }
 
                 }
@@ -126,14 +129,14 @@
                  * @param {Element} elContainer
                  */
                 function markAllDirectAncestorsAsIndeterminate(elContainer) {
-                    elContainer.parents("li").children(selectorForCheckboxes).prop({
+                    getAllDirectAnccestorCheckboxes(elContainer).prop({
                         indeterminate: true,
                         checked: false
                     });
                 }
 
                 function markTheParentOfThisTierUncheckedOrIndeterminate(parent) {
-                    parent.children(selectorForCheckboxes).prop({
+                    getCheckboxOfContainer(parent).prop({
                         checked: false,
                         indeterminate: (parent.find(selectorForCheckboxes + ':checked').length > 0)
                     });
@@ -141,7 +144,7 @@
 
                 // parent should be an li, containing a checkbox.
                 function markTheParentOfThisTierChecked(parent) {
-                    parent.children(selectorForCheckboxes).prop({
+                    getCheckboxOfContainer(parent).prop({
                         indeterminate: false,
                         checked: true
                     });
@@ -173,12 +176,36 @@
                 }
 
                 /**
-                 *
+                 * Gets the input[type=checkbox] of the container element based
+                 * on stepsFromCheckboxToContainer.
                  *
                  * @return {Element}
                  */
                 function getCheckboxOfContainer(elContainer) {
-                    // elContainer.
+                    var childCheckbox = elContainer;
+                    var s = stepsFromCheckboxToContainer - 1;
+                    for (var i = 0; i < s; i++) {
+                        childCheckbox = childCheckbox.child();
+                    }
+                    childCheckbox = childCheckbox.children(selectorForCheckboxes);
+                    return childCheckbox;
+                }
+
+                /**
+                 * Starting at elContainer (eg li), this function will get all
+                 * direct anncestor checkboxes.
+                 *
+                 */
+                function getAllDirectAnccestorCheckboxes(elContainer) {
+                    var childCheckbox = elContainer.parents("li");
+
+                    var s = stepsFromCheckboxToContainer - 1;
+                    for (var i = 0; i < s; i++) {
+                        childCheckbox = childCheckbox.child();
+                    }
+                    childCheckbox = childCheckbox.children(selectorForCheckboxes);
+
+                    return childCheckbox;
                 }
 
 
