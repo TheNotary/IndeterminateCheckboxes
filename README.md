@@ -19,10 +19,10 @@ The default html markup scheme goes like this:
 
     ul
       li
-        input
+        input.indeterminate-checkbox
         ul
           li
-            input
+            input.indeterminate-checkbox
 
 Notice that going from input up to li, it's just 1 step?  
 That is defined as the variable at the top of the file `stepsFromCheckboxToContainer`.  
